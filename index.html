@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Menu Flipbook</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <style>
+    body {
+      background: #f2f2f2;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #flipbook {
+      width: 561px;   /* 19.8cm x 96dpi ≈ 561px */
+      height: 1125px; /* 29.7cm x 96dpi ≈ 1125px */
+    }
+    #flipbook .page {
+      background: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    #flipbook .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .controls {
+      margin-top: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #555;
+    }
+    @media (max-width: 900px) {
+      #flipbook {
+        width: 90vw;
+        height: 90vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="flipbook"></div>
+
+  <div class="controls">
+    <button id="prevBtn">⬅ Prev</button>
+    <button id="nextBtn">Next ➡</button>
+    <button onclick="openFullscreen()">⛶ Fullscreen</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const totalPages = 21;
+      const flipbook = document.getElementById("flipbook");
+
+      // สร้างหน้า eBook อัตโนมัติ
+      for (let i = 1; i <= totalPages; i++) {
+        const pageDiv = document.createElement("div");
+        pageDiv.className = "page";
+
+        const img = document.createElement("img");
+        img.src = `page${i}.jpg`; 
+        img.alt = `Page ${i}`;
+
+        pageDiv.appendChild(img);
+        flipbook.appendChild(pageDiv);
+      }
+
+      // สร้าง flipbook
+      $("#flipbook").turn({
+        width: 561,
+        height: 1125,
+        autoCenter: true
+      });
+
+      // ปุ่ม Prev/Next ใช้งานได้
+      document.getElementById("prevBtn").addEventListener("click", function() {
+        $("#flipbook").turn("previous");
+      });
+      document.getElementById("nextBtn").addEventListener("click", function() {
+        $("#flipbook").turn("next");
+      });
+    });
+
+    // Fullscreen
+    function openFullscreen() {
+      let elem = document.getElementById("flipbook");
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
